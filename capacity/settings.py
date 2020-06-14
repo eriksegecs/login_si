@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
+import django_heroku
 from django.urls import reverse_lazy
 
 PASSWORD_RESET_TIMEOUT=60
@@ -144,3 +145,4 @@ STATIC_ROOT = 'var/www/static/' # this will help django to locate the files
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "staticfiles"), 
 ]
+django_heroku.settings(locals())
