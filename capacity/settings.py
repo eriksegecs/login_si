@@ -140,9 +140,10 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
+django_heroku.settings(locals())
+
 STATIC_URL = '/static/' # this will be added before your file name
 STATIC_ROOT = 'var/www/static/' # this will help django to locate the files
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "staticfiles"), 
 ]
-django_heroku.settings(locals())
