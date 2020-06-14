@@ -1,1 +1,1 @@
-web: gunicorn login_si.wsgi
+web: gunicorn capacity.wsgi
