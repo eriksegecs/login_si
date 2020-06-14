@@ -1,0 +1,54 @@
+<script
+  src="https://code.jquery.com/jquery-3.4.1.min.js"
+  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+  crossorigin="anonymous"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.css">
+  
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
+
+<div class="wrapper">
+<form action="/metricas/" method="post">{% csrf_token %}
+    {{ form }}
+    <input type="submit" value="Filtrar">
+</form>
+
+
+<h1>Metricas</h1>
+<table id="myTable" class="display">
+<thead>
+    <tr>
+    <th>data</th>
+    <th>nome</th>
+    <th>valor</th>
+    </tr>
+    </thead>
+    <tbody>
+{% for metrica in lista_metricas %}
+    <tr>
+    <td>{{ metrica.data }}</td>
+    <td>{{ metrica.nome }}</td>
+    <td>{{ metrica.valor }}</td>
+    </tr>
+{% empty %}
+    <li>Sem métricas.</li>
+{% endfor %}
+    </tbody>
+</table>
+</div>
+
+<Script>
+$(document).ready( function () {
+    $('#myTable').DataTable();
+} );
+
+$(document).ready(function() {
+    $('#id_nome').select2();
+});
+
+$(document).ready(function() {
+    $('#id_valor').select2();
+});
+
+</script>

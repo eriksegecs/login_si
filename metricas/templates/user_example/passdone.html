@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>The Index</title>
+</head>
+<body>
+    <h1>Pagina Inicial</h1>
+    {% if user.is_authenticated %}
+    <h2>Sua senha foi alterada com sucesso {{ user.username }}</h2>
+    <h2><a href="{% url 'logout' %}">logout</a></h2>
+    <h2><a href="{% url 'password_change' %}">Trocar minha senha</a></h2>
+    {% else %}
+    <h2>Você nao está logado.</h2>
+    <h2><a href="{% url 'login' %}">Login</a></h2>
+    <h2><a href="{% url 'register' %}">Registrar</a></h2>
+    {% endif %}
+</body>
+</html>
