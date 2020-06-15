@@ -25,7 +25,7 @@ class UserManager(BaseUserManager):
         if not username:
             raise ValueError(_('The given username must be set'))
         email = self.normalize_email(email)
-        user = self.model(username=username, email=email, is_staff=True, is_active=True, last_login=now, date_joined=now, **extra_fields)
+        user = self.model(username=username, email=email, is_staff=True, is_active=True, last_login2=now, date_joined=now, **extra_fields)
         user.set_password(password)
         user.save(using=self._db)
         return user
@@ -44,7 +44,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(_('staff status'), default=False, help_text=_('Designates whether the user can log into this admin site.'))
     is_active = models.BooleanField(_('active'), default=True, help_text=_('Designates whether this user should be treated as active. Unselect this instead of deleting accounts.'))
     date_joined = models.DateTimeField(_('date joined'), default=timezone.now)
-    last_login = models.DateTimeField(_('date joined'), default=timezone.now)
+    last_login = models.DateTimeField(_('last login'), default=timezone.now, blank=True, null=True)
+    last_login2 = models.DateTimeField(_('last login2'), default=timezone.now)
     previous_password = models.CharField(_('previous password'), max_length=128, default='')
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ['email']
@@ -67,14 +68,14 @@ class User(AbstractBaseUser, PermissionsMixin):
         """
         print(timezone.now())
         print(self.date_joined)
-        if self.date_joined == self.last_login:
+        if self.date_joined == self.last_login2:
             print("date joined == last login")
             if timezone.now() - self.date_joined > datetime.timedelta(minutes=1):
                 User.objects.get(username=self.username).delete()
                 print("date joined > 1min | Usuario deletado")
                 #return False
 
-        if timezone.now() - self.last_login > datetime.timedelta(minutes=2):
+        if timezone.now() - self.last_login2 > datetime.timedelta(minutes=2):
             print("last login > 2 min | is_active = False")
             #self.is_active = False
         

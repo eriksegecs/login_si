@@ -44,7 +44,7 @@ def register(request):
             mensagem = "A sua senha temporaria é : " + password + " \n Você deve logar no site dentro de 1 minuto, caso contrario será necessario re-cadastrar sua conta e email."
             user.email_user("Sua Conta Django", mensagem, "eriksegecs@yahoo.com.br")
             raw_pass = form.cleaned_data.get(password)
-            user.last_login = user.date_joined
+            user.last_login2 = user.date_joined
             user.save()
             #user = authenticate(username=username, password=password)
             #login(request, user)
@@ -64,15 +64,16 @@ def MyPasswordResetView(request):
         form = UserResetPasswordForm(request.POST)
         email = request.POST['email']
         password = User.objects.make_random_password(length=14, allowed_chars="abcdefghjkmnpqrstuvwxyz01234567889")
-        user = User.objects.get(email=email)
-        user.set_password(password)
-        username = user.username
-        mensagem = "A sua senha foi resetada para : " + password
-        user.email_user("Sua Conta Django", mensagem, "eriksegecs@yahoo.com.br")
-        raw_pass = password
-        user.save()
-        #user = authenticate(username=username, password=password)
-        #login(request, user)
+        try:
+            user = User.objects.get(email=email)
+            user.set_password(password)
+            username = user.username
+            mensagem = "A sua senha foi resetada para : " + password
+            user.email_user("Sua Conta Django", mensagem, "eriksegecs@yahoo.com.br")
+            raw_pass = password
+            user.save()
+        except:
+            pass
         return redirect('index')
             
 
@@ -85,12 +86,19 @@ def MyPasswordResetView(request):
 class MyLoginView(LoginView):
     def form_valid(self, form):
         """Security check complete. Log the user in."""
-        auth_login(self.request, form.get_user())
         u =  form.get_user()
-        if timezone.now() - u.last_login > datetime.timedelta(minutes=2):
+        try:
+            usern = User.objects.get(username=u.username)
+        except:
+            return HttpResponseRedirect(reverse_lazy('expired'))
+
+        if timezone.now() - u.last_login2 > datetime.timedelta(minutes=2):
+            auth_login(self.request, form.get_user())
             return HttpResponseRedirect(reverse_lazy('password_change'))
         else:
-            u.last_login = timezone.now()
+            auth_login(self.request, form.get_user())
+            usern.last_login2 = timezone.now()
+            usern.save()
             return HttpResponseRedirect(self.get_success_url())
 
 
@@ -106,3 +114,6 @@ class MyPasswordChangeView(PasswordChangeView):
 
 def Passdone(request):
     return render(request, 'user_example/passdone.html')
+
+def Expired(request):
+    return render(request, 'user_example/expired.html')
