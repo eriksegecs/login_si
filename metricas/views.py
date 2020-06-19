@@ -107,6 +107,7 @@ class MyPasswordChangeView(PasswordChangeView):
         form.save()
         u = form.user
         u.previous_password = u.password
+        u.save()
         # Updating the password logs out all other sessions for the user
         # except the current one.
         update_session_auth_hash(self.request, form.user)

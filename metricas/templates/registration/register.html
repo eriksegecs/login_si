@@ -1,5 +1,7 @@
 {% load static %}
 
+
+
 <!DOCTYPE html>
 <html lang="pt-br">
 
@@ -46,12 +48,24 @@
                             data-validate="Username is required">
                             <input class="input100 d-flex" name="username" type="text" autofocus autocapitalize="none"
                                 autocomplete="username" maxlength="150" required id="id_username">
-                            <span class="label-input100 d-flex justify-content-start">Usuário</span>
+                            <span class="label-input100 d-flex justify-content-start">
+                                {% if form.errors %}
+                                {{form.username.errors | escape}}
+                                {% else %}
+                                Usuário
+                                {% endif %}
+                            </span>
                         </div>
                         <div class="w-100 wrap-input100 rs3 validate-input" data-validate="Email is required">
                             <input class="input100" name="email" type="email" autofocus autocapitalize="none"
                                 autocomplete="email" maxlength="150" required id="id_email">
-                            <span class="label-input100 d-flex justify-content-start">E-mail</span>
+                            <span class="label-input100 d-flex justify-content-start">
+                                {% if form.errors %}
+                                {{form.email.errors | escape}}
+                                {% else %}
+                                E-mail
+                                {% endif %}
+                            </span>
                         </div>
                         <div class="container-login100-form-btn">
                             <button type="submit" value="Register" class="login100-form-btn" style="display: flex; justify-content: center;">

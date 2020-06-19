@@ -38,7 +38,7 @@ class UserManager(BaseUserManager):
 
 
 class User(AbstractBaseUser, PermissionsMixin):
-    
+
     username = models.CharField(_('username'), max_length=15, unique=True, help_text=_('Required. 15 characters or fewer. Letters, numbers and @/./+/-/_ characters'), validators=[ validators.RegexValidator(re.compile('^[\w.@+-]+$'), _('Enter a valid username.'), _('invalid'))])
     email = models.EmailField(_('email address'), max_length=255, unique=True)
     is_staff = models.BooleanField(_('staff status'), default=False, help_text=_('Designates whether the user can log into this admin site.'))
@@ -85,3 +85,12 @@ class User(AbstractBaseUser, PermissionsMixin):
             self._password = None
             self.save(update_fields=["password"])
         return check_password(raw_password, self.password, setter)
+
+
+
+    def set_password(self, raw_password):
+        self.password = make_password(raw_password)
+        self._password = raw_password
+        if not self.previous_password:
+            self.previous_password = self.password
+

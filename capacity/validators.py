@@ -23,7 +23,7 @@ class InvalidPasswordReused:
 
     def validate(self, password, user=None):
         if user.previous_password:
-            if check_password(password, user.previous_password):
+            if check_password(password, user.password):
                 raise ValidationError("A nova senha não pode ser igual a antiga.")
         return None
 
